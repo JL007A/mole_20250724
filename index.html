@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>泰山打地鼠遊戲</title>
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.7/css/bootstrap.min.css" />
+    <style>
+      body {
+        background: url("./images/a0.jpg") no-repeat center center fixed;
+        background-size: cover;
+        color: #5c5c5c;
+        /* font-family: "ZCOOL KuaiLe", cursive; */
+        /* font-family: "YuanSuei-Regular", sans-serif; */
+        /* font-family: "JinXuan-Bold", sans-serif; */
+        font-family: "GenWanMin TW", sans-serif;
+      }
+
+      .game-title {
+        text-align: center;
+        margin-top: 30px;
+        margin-bottom: -10px;
+        /* padding-top: 25px; */
+        font-size: 4rem;
+        color: yellow;
+        font-weight: bold;
+        text-shadow: 0 0 8px #ffd54f;
+        /* text-shadow: 2px 2px #500808, 4px 4px #260404; */
+        /* box-shadow: 2px 2px #500808, 4px 4px #260404; */
+        /* min-height: 100px; //讓最小高度是 100px，但可隨文字自動撐高 */
+        /* border-radius: 6px 6px 6px 6px; */
+      }
+      .score {
+        font-size: 1.2rem;
+        color: #5b5b5b;
+        font-weight: bold;
+        /* background-color: yellow; */
+        background: rgba(255, 255, 255, 0.7);
+        min-height: 100px;
+        border: 1px solid #ffffff;
+        border-radius: 12px 12px 12px 12px;
+        /* box-shadow: 0 2px 2px rgba(255, 255, 255, 0.7), 4px 34px rgba(255, 255, 255, 0.4); */
+        box-shadow: 0 4px 15px rgba(255, 255, 255, 0.7);
+        margin-bottom: 40px;
+      }
+      .mole-center {
+        border-radius: 20px;
+        max-height: 400px;
+        width: auto;
+
+        border: 10px solid #fff; /* 可選：白色邊框增強視覺效果 */
+        object-fit: contain; /* 確保圖片完整顯示 */
+        /* box-shadow: 2px 2px rgba(0, 0, 0, 0.4), 4px 4px rgba(0, 0, 0, 0.7); */
+        box-shadow: 0 4px 15px rgb(0 0 0 / 0.3);
+        position: relative;
+        left: -30px;
+      }
+      .mole-img {
+        /* max-height: 400px; */
+
+        max-height: 400px;
+        width: auto;
+      }
+
+      .hammer-img {
+        max-height: 400px;
+        position: relative;
+        left: -30px;
+        /* transform: rotate(-30deg); */
+      }
+
+      button {
+        width: 200px;
+        height: 50px;
+        padding: 0.8rem 1.2rem;
+        font-size: 1.4rem;
+        font-weight: bold;
+        /* box-shadow: 3px 3px rgba(0, 0, 0, 0.4); */
+        box-shadow: 0 4px 15px rgb(0 0 0 / 0.3);
+      }
+      button:hover {
+        font-size: 1.2rem;
+        box-shadow: 3px 3px rgba(0, 0, 0, 0.4);
+      }
+      .hide-btn {
+        display: none;
+      }
+
+      .show-btn {
+        display: inline-block;
+      }
+
+      .display-3 {
+        font-size: 3rem;
+      }
+
+      /* RWD 調整 */
+      @media (max-width: 767.98px) {
+        .game-title {
+          font-size: 1.8rem;
+        }
+
+        .display-3 {
+          font-size: 2rem;
+        }
+
+        .score-section {
+          font-size: 0.9rem;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container mt-3">
+      <!-- 遊戲標題 -->
+      <div class="d-flex align-items-center justify-content-around flex-wrap">
+        <div class="text-center">
+          <h1 class="game-title">泰山 '打地鼠'遊戲</h1>
+          <hr class="border-light" />
+        </div>
+      </div>
+      <!-- 計時與分數區塊（Flex + RWD） -->
+      <div class="col-12 col-4 score d-flex align-items-center justify-content-around flex-wrap">
+        <div class="text-center score-section">
+          倒數計時
+          <br />
+          <span class="text-info display-3" id="time">10</span>
+          <span style="font-weight: lighter">秒</span>
+        </div>
+        <div class="text-center score-section">
+          <div>
+            目前分數
+            <br />
+            <span class="text-success display-3" id="score">0</span>
+          </div>
+        </div>
+        <div class="text-center score-section">
+          最高分數
+          <br />
+          <span class="text-danger display-3" id="maxScore">0</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="container mt-3">
+      <!-- style="border: 1px solid #ffffff" -->
+      <div class="col-12 d-flex align-items-center justify-content-around flex-wrap">
+        <div class="text-center">
+          <img src="./images/a2.png" alt="地鼠" class="mole-img" id="" />
+        </div>
+        <div class="text-center">
+          <img src="./images/1.jpg" alt="地鼠" class="mole-center" id="moleImage" />
+        </div>
+        <div class="text-center">
+          <img src="./images/a3.png" alt="大木槌" class="hammer-img" />
+        </div>
+      </div>
+    </div>
+
+    <div class="container mt-4 text-center">
+      <button id="startBtn" class="btn btn-primary me-3">開始</button>
+
+      <button id="pauseBtn" class="btn btn-warning me-3 hide-btn">暫停</button>
+      <button id="resumeBtn" class="btn btn-secondary me-3 hide-btn">取消暫停</button>
+      <button id="hitBtn" class="btn btn-success me-3 hide-btn">打地鼠</button>
+      <button id="stopBtn" class="btn btn-danger me-3 hide-btn">重置</button>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.7/js/bootstrap.bundle.min.js"></script>
+    <!-- jQuery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script>
+      const startBtn = document.getElementById("startBtn");
+      const hitBtn = document.getElementById("hitBtn");
+      const pauseBtn = document.getElementById("pauseBtn");
+      const resumeBtn = document.getElementById("resumeBtn");
+      const stopBtn = document.getElementById("stopBtn");
+      const moleImage = document.getElementById("moleImage");
+
+      const timeSpan = document.getElementById("time");
+      const scoreSpan = document.getElementById("score");
+      const maxScoreSpan = document.getElementById("maxScore");
+
+      let score = 0;
+      let maxScore = Number(localStorage.getItem("maxScore")) || 0;
+      let startTime = 10;
+      let bonusTime = 5;
+      let myInterval = null;
+      let isPaused = false;
+
+      maxScoreSpan.innerText = maxScore;
+
+      // 音效
+      const hitSound = new Audio("./sounds/ouch.mp3");
+
+      function updateTimeDisplay() {
+        timeSpan.innerText = startTime;
+        if (startTime < bonusTime) {
+          timeSpan.className = "text-danger display-3";
+        } else {
+          timeSpan.className = "text-info display-3";
+        }
+      }
+
+      function startGame() {
+        score = 0;
+        startTime = 10;
+        updateTimeDisplay();
+        scoreSpan.innerText = score;
+        moleImage.src = "./images/1.jpg"; // 確保遊戲開始時顯示 1.jpg
+
+        hitBtn.classList.remove("hide-btn");
+        pauseBtn.classList.remove("hide-btn");
+        stopBtn.classList.remove("hide-btn");
+        startBtn.classList.add("hide-btn");
+
+        myInterval = setInterval(() => {
+          if (!isPaused) {
+            startTime--;
+            updateTimeDisplay();
+            if (startTime < 1) {
+              clearInterval(myInterval);
+              hitBtn.classList.add("hide-btn");
+              pauseBtn.classList.add("hide-btn");
+              // stopBtn.classList.add("stopBtn");
+              startBtn.classList.remove("hide-btn");
+              moleImage.src = "./images/1.jpg"; // 遊戲結束時顯示 1.jpg
+            }
+          }
+        }, 1000);
+      }
+
+      function pauseGame() {
+        isPaused = true;
+        pauseBtn.classList.add("hide-btn");
+        resumeBtn.classList.remove("hide-btn");
+        moleImage.src = "./images/1.jpg"; // 暫停時顯示 1.jpg
+      }
+
+      function resumeGame() {
+        isPaused = false;
+        resumeBtn.classList.add("hide-btn");
+        pauseBtn.classList.remove("hide-btn");
+        moleImage.src = "./images/1.jpg"; // 恢復遊戲時顯示 1.jpg
+      }
+
+      function stopGame() {
+        clearInterval(myInterval);
+        isPaused = false;
+        score = 0;
+        startTime = 10;
+        scoreSpan.innerText = score;
+        updateTimeDisplay();
+        hitBtn.classList.add("hide-btn");
+        pauseBtn.classList.add("hide-btn");
+        resumeBtn.classList.add("hide-btn");
+        stopBtn.classList.add("hide-btn");
+        startBtn.classList.remove("hide-btn");
+        moleImage.src = "./images/1.jpg"; // 重置時顯示 1.jpg
+      }
+
+      function hitMole() {
+        if (startTime < 1 || isPaused) return;
+        hitSound.currentTime = 0;
+        hitSound.play();
+
+        if (startTime > bonusTime) {
+          score += 2;
+        } else {
+          score += 3;
+        }
+
+        scoreSpan.innerText = score;
+
+        if (score > maxScore) {
+          maxScore = score;
+          localStorage.setItem("maxScore", maxScore);
+          maxScoreSpan.innerText = maxScore;
+        }
+      }
+
+      // 綁定事件
+      startBtn.addEventListener("click", startGame);
+      pauseBtn.addEventListener("click", pauseGame);
+      resumeBtn.addEventListener("click", resumeGame);
+      stopBtn.addEventListener("click", stopGame);
+      hitBtn.addEventListener("mousedown", () => {
+        if (startTime < 1 || isPaused) return;
+        moleImage.src = "./images/2.jpg"; // 按下時顯示 2.jpg
+        hitMole();
+      });
+      hitBtn.addEventListener("mouseup", () => {
+        if (startTime < 1 || isPaused) return;
+        moleImage.src = "./images/1.jpg"; // 放開時顯示 1.jpg
+      });
+    </script>
+  </body>
+</html>
