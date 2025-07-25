@@ -95,8 +95,12 @@
         font-size: 3rem;
       }
 
-      /* RWD 調整 */
+      /* RWD 調整 + 手機裝置隱藏指定圖片*/
+      /* 這樣當瀏覽器寬度在 767.98px 以下（手機裝置常見寬度）時，兩張圖片會自動隱藏。在桌機版則照常顯示。 */
       @media (max-width: 767.98px) {
+        .desktop-only {
+          display: none !important;
+        }
         .game-title {
           font-size: 1.8rem;
         }
@@ -146,15 +150,16 @@
 
     <div class="container mt-3">
       <!-- style="border: 1px solid #ffffff" -->
+      <!-- 手機裝置隱藏指定圖片  desktop-only-->
       <div class="col-12 d-flex align-items-center justify-content-around flex-wrap">
         <div class="text-center">
-          <img src="./images/a2.png" alt="地鼠" class="mole-img" id="" />
+          <img src="./images/a2.png" alt="地鼠" class="mole-img desktop-only" id="" />
         </div>
         <div class="text-center">
           <img src="./images/1.jpg" alt="地鼠" class="mole-center" id="moleImage" />
         </div>
         <div class="text-center">
-          <img src="./images/a3.png" alt="大木槌" class="hammer-img" />
+          <img src="./images/a3.png" alt="大木槌" class="hammer-img desktop-only" />
         </div>
       </div>
     </div>
@@ -287,13 +292,23 @@
       pauseBtn.addEventListener("click", pauseGame);
       resumeBtn.addEventListener("click", resumeGame);
       stopBtn.addEventListener("click", stopGame);
-      hitBtn.addEventListener("mousedown", () => {
+      // hitBtn.addEventListener("mousedown", () => {
+      hitBtn.addEventListener("pointerdown", () => {
+        console.log(1);
+
         if (startTime < 1 || isPaused) return;
+        console.log(3);
+
         moleImage.src = "./images/2.jpg"; // 按下時顯示 2.jpg
         hitMole();
       });
-      hitBtn.addEventListener("mouseup", () => {
+      // hitBtn.addEventListener("mouseup", () => {
+      hitBtn.addEventListener("pointerup", () => {
+        console.log(2);
+
         if (startTime < 1 || isPaused) return;
+        console.log(4);
+
         moleImage.src = "./images/1.jpg"; // 放開時顯示 1.jpg
       });
     </script>
