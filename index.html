@@ -293,23 +293,25 @@
       pauseBtn.addEventListener("click", pauseGame);
       resumeBtn.addEventListener("click", resumeGame);
       stopBtn.addEventListener("click", stopGame);
-
       // hitBtn.addEventListener("mousedown", () => {
-      // hitBtn.addEventListener("mouseup", () => {
+      hitBtn.addEventListener("pointerdown", () => {
+        console.log(1);
 
-      hitBtn.addEventListener("pointerdown", onHitStart);
-      hitBtn.addEventListener("pointerup", onHitEnd);
-
-      function onHitStart(e) {
         if (startTime < 1 || isPaused) return;
+        console.log(3);
+
         moleImage.src = "./images/2.jpg"; // 按下時顯示 2.jpg
         hitMole();
-      }
+      });
+      // hitBtn.addEventListener("mouseup", () => {
+      hitBtn.addEventListener("pointerup", () => {
+        console.log(2);
 
-      function onHitEnd(e) {
         if (startTime < 1 || isPaused) return;
+        console.log(4);
+
         moleImage.src = "./images/1.jpg"; // 放開時顯示 1.jpg
-      }
+      });
     </script>
   </body>
 </html>
