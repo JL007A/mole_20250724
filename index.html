@@ -53,8 +53,8 @@
         object-fit: contain; /* 確保圖片完整顯示 */
         /* box-shadow: 2px 2px rgba(0, 0, 0, 0.4), 4px 4px rgba(0, 0, 0, 0.7); */
         box-shadow: 0 4px 15px rgb(0 0 0 / 0.3);
-        /* position: relative;
-        left: -5px; */
+        position: relative;
+        left: -5px;
       }
       .mole-img {
         /* max-height: 400px; */
@@ -100,6 +100,7 @@
       @media (max-width: 767.98px) {
         .desktop-only {
           display: none !important;
+          text-align: center;
         }
         .game-title {
           font-size: 1.8rem;
@@ -292,25 +293,23 @@
       pauseBtn.addEventListener("click", pauseGame);
       resumeBtn.addEventListener("click", resumeGame);
       stopBtn.addEventListener("click", stopGame);
+
       // hitBtn.addEventListener("mousedown", () => {
-      hitBtn.addEventListener("pointerdown", () => {
-        console.log(1);
+      // hitBtn.addEventListener("mouseup", () => {
 
+      hitBtn.addEventListener("pointerdown", onHitStart);
+      hitBtn.addEventListener("pointerup", onHitEnd);
+
+      function onHitStart(e) {
         if (startTime < 1 || isPaused) return;
-        console.log(3);
-
         moleImage.src = "./images/2.jpg"; // 按下時顯示 2.jpg
         hitMole();
-      });
-      // hitBtn.addEventListener("mouseup", () => {
-      hitBtn.addEventListener("pointerup", () => {
-        console.log(2);
+      }
 
+      function onHitEnd(e) {
         if (startTime < 1 || isPaused) return;
-        console.log(4);
-
         moleImage.src = "./images/1.jpg"; // 放開時顯示 1.jpg
-      });
+      }
     </script>
   </body>
 </html>
