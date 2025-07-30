@@ -312,9 +312,9 @@
       pauseBtn.addEventListener("click", pauseGame);
       resumeBtn.addEventListener("click", resumeGame);
       stopBtn.addEventListener("click", stopGame);
-      // hitBtn.addEventListener("pointerdown", () => {
-      hitBtn.addEventListener("mousedown", () => {
-        logEvent("mousedown");
+      // hitBtn.addEventListener("mousedown", () => {
+      hitBtn.addEventListener("pointerdown", () => {
+        logEvent("pointerdown");
         console.log(1);
 
         if (startTime < 1 || isPaused) return;
@@ -324,9 +324,9 @@
         hitMole();
       });
 
-      // hitBtn.addEventListener("pointerup", () => {
-      hitBtn.addEventListener("mouseup", () => {
-        logEvent("mouseup");
+      // hitBtn.addEventListener("mouseup", () => {
+      hitBtn.addEventListener("pointerup", () => {
+        logEvent("pointerup");
         console.log(2);
 
         if (startTime < 1 || isPaused) return;
@@ -335,26 +335,26 @@
         moleImage.src = "./images/1.jpg"; // 放開時顯示 1.jpg
       });
       // touch_04
-      hitBtn.addEventListener(
-        "touchstart",
-        () => {
-          logEvent("touchstart");
-          console.log(a);
-          if (startTime < 1 || isPaused) return;
-          console.log(c);
-          moleImage.src = "./images/2.jpg";
-          hitMole();
-        },
-        { passive: true }
-      );
+      // hitBtn.addEventListener(
+      //   "touchstart",
+      //   () => {
+      //     logEvent("touchstart");
+      //     console.log(a);
+      //     if (startTime < 1 || isPaused) return;
+      //     console.log(c);
+      //     moleImage.src = "./images/2.jpg";
+      //     hitMole();
+      //   },
+      //   { passive: true }
+      // );
 
-      hitBtn.addEventListener("touchend", () => {
-        logEvent("touchend");
-        console.log(b);
-        if (startTime < 1 || isPaused) return;
-        console.log(d);
-        moleImage.src = "./images/1.jpg";
-      });
+      // hitBtn.addEventListener("touchend", () => {
+      //   logEvent("touchend");
+      //   console.log(b);
+      //   if (startTime < 1 || isPaused) return;
+      //   console.log(d);
+      //   moleImage.src = "./images/1.jpg";
+      // });
     </script>
   </body>
 </html>
