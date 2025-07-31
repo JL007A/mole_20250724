@@ -176,11 +176,11 @@
       <button id="clearScoreBtn" class="btn btn-secondary me-3 hide-btn">清除最高分數</button>
     </div>
     <!-- eventLog_01 -->
-    <div class="container mt-4">
+    <!-- <div class="container mt-4">
       <div id="eventLog" class="bg-light p-3 rounded shadow border" style="height: 200px; overflow-y: auto">
         <p class="text-muted border" style="background-color: #e2e2e2">事件日誌：</p>
       </div>
-    </div>
+    </div> -->
     <!-- Bootstrap JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.7/js/bootstrap.bundle.min.js"></script>
     <!-- jQuery -->
@@ -198,7 +198,7 @@
       const maxScoreSpan = document.getElementById("maxScore");
       const clearScoreBtn = document.getElementById("clearScoreBtn");
       // logeventlog_02
-      const eventLog = document.getElementById("eventLog");
+      // const eventLog = document.getElementById("eventLog");
 
       let score = 0;
       let maxScore = Number(localStorage.getItem("maxScore")) || 0;
@@ -210,18 +210,18 @@
       maxScoreSpan.innerText = maxScore;
 
       // 音效
-      const hitSound = new Audio("./sounds/ouch.mp3");
+      const hitSound = new Audio("./sounds/c1.mp3");
       // logEvent_03
-      function logEvent(eventType) {
-        const now = new Date();
-        const timeString = now.toLocaleTimeString();
-        const newLog = document.createElement("p");
-        newLog.textContent = `[${timeString}] 事件: ${eventType}`;
-        eventLog.prepend(newLog);
-        if (eventLog.children.length > 30) {
-          eventLog.removeChild(eventLog.lastChild);
-        }
-      }
+      // function logEvent(eventType) {
+      //   const now = new Date();
+      //   const timeString = now.toLocaleTimeString();
+      //   const newLog = document.createElement("p");
+      //   newLog.textContent = `[${timeString}] 事件: ${eventType}`;
+      //   eventLog.prepend(newLog);
+      //   if (eventLog.children.length > 30) {
+      //     eventLog.removeChild(eventLog.lastChild);
+      //   }
+      // }
 
       function updateTimeDisplay() {
         timeSpan.innerText = startTime;
@@ -259,7 +259,7 @@
             }
           }
         }, 1000);
-        logEvent("遊戲開始");
+        // logEvent("遊戲開始");
       }
 
       function pauseGame() {
@@ -267,7 +267,7 @@
         pauseBtn.classList.add("hide-btn");
         resumeBtn.classList.remove("hide-btn");
         moleImage.src = "./images/1.jpg"; // 暫停時顯示 1.jpg
-        logEvent("遊戲暫停");
+        // logEvent("遊戲暫停");
       }
 
       function resumeGame() {
@@ -275,7 +275,7 @@
         resumeBtn.classList.add("hide-btn");
         pauseBtn.classList.remove("hide-btn");
         moleImage.src = "./images/1.jpg"; // 恢復遊戲時顯示 1.jpg
-        logEvent("遊戲恢復");
+        // logEvent("遊戲恢復");
       }
 
       function stopGame() {
@@ -292,14 +292,14 @@
         clearScoreBtn.classList.add("hide-btn");
         startBtn.classList.remove("hide-btn");
         moleImage.src = "./images/1.jpg"; // 重置時顯示 1.jpg
-        logEvent("遊戲重置");
+        // logEvent("遊戲重置");
       }
 
       function clearMaxScore() {
         localStorage.removeItem("maxScore");
         maxScore = 0;
         maxScoreSpan.innerText = maxScore;
-        logEvent("最高分數清除");
+        // logEvent("最高分數清除");
       }
       clearScoreBtn.addEventListener("click", clearMaxScore); // 清除最高分數
 
@@ -330,7 +330,7 @@
       stopBtn.addEventListener("click", stopGame);
       // hitBtn.addEventListener("mousedown", () => {
       hitBtn.addEventListener("pointerdown", () => {
-        logEvent("pointerdown");
+        // logEvent("pointerdown");
         console.log(1);
 
         if (startTime < 1 || isPaused) return;
@@ -342,7 +342,7 @@
 
       // hitBtn.addEventListener("mouseup", () => {
       hitBtn.addEventListener("pointerup", () => {
-        logEvent("pointerup");
+        // logEvent("pointerup");
         console.log(2);
 
         if (startTime < 1 || isPaused) return;
