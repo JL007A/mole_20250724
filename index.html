@@ -15,8 +15,6 @@
         /* font-family: "YuanSuei-Regular", sans-serif; */
         /* font-family: "JinXuan-Bold", sans-serif; */
         font-family: "GenWanMin TW", sans-serif;
-        height: 100dvh; /* 不然還要捲動體驗不好。 使用 dynamic viewport height */
-        /* overflow: hidden; 如果你希望不出現捲軸 */
       }
 
       .game-title {
@@ -72,8 +70,8 @@
         left: -30px; */
         /* transform: rotate(-30deg); */
       }
-      /* prettier-ignore */
-      button, .btn, #hitBtn {
+
+      button {
         width: 200px;
         height: 50px;
         padding: 0.8rem 1.2rem;
@@ -81,13 +79,11 @@
         font-weight: bold;
         /* box-shadow: 3px 3px rgba(0, 0, 0, 0.4); */
         box-shadow: 0 4px 15px rgb(0 0 0 / 0.3);
-        /* touch-action: manipulation;  可以禁止預設行為  解決問題:蘋果連點兩下會放大 */
       }
       button:hover {
         font-size: 1.2rem;
         box-shadow: 3px 3px rgba(0, 0, 0, 0.4);
       }
-
       .hide-btn {
         display: none;
       }
@@ -180,12 +176,11 @@
       <button id="clearScoreBtn" class="btn btn-secondary me-3 hide-btn">清除最高分數</button>
     </div>
     <!-- eventLog_01 -->
-    <!-- <div class="container mt-4">
-      <h3 class="text-2xl font-bold mb-6 text-white bg-primary rounded">按鈕事件偵測</h3>
-      <div id="eventLog" class="bg-light p-3 rounded shadow border" style="height: 200px; overflow-y: auto; position: relative; top: -10px">
+    <div class="container mt-4">
+      <div id="eventLog" class="bg-light p-3 rounded shadow border" style="height: 200px; overflow-y: auto">
         <p class="text-muted border" style="background-color: #e2e2e2">事件日誌：</p>
       </div>
-    </div> -->
+    </div>
     <!-- Bootstrap JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.7/js/bootstrap.bundle.min.js"></script>
     <!-- jQuery -->
@@ -203,7 +198,7 @@
       const maxScoreSpan = document.getElementById("maxScore");
       const clearScoreBtn = document.getElementById("clearScoreBtn");
       // logeventlog_02
-      // const eventLog = document.getElementById("eventLog");
+      const eventLog = document.getElementById("eventLog");
 
       let score = 0;
       let maxScore = Number(localStorage.getItem("maxScore")) || 0;
@@ -215,18 +210,18 @@
       maxScoreSpan.innerText = maxScore;
 
       // 音效
-      const hitSound = new Audio("./sounds/c1.mp3");
+      const hitSound = new Audio("./sounds/ouch.mp3");
       // logEvent_03
-      // function logEvent(eventType) {
-      //   const now = new Date();
-      //   const timeString = now.toLocaleTimeString();
-      //   const newLog = document.createElement("p");
-      //   newLog.textContent = `[${timeString}] 事件: ${eventType}`;
-      //   eventLog.prepend(newLog);
-      //   if (eventLog.children.length > 30) {
-      //     eventLog.removeChild(eventLog.lastChild);
-      //   }
-      // }
+      function logEvent(eventType) {
+        const now = new Date();
+        const timeString = now.toLocaleTimeString();
+        const newLog = document.createElement("p");
+        newLog.textContent = `[${timeString}] 事件: ${eventType}`;
+        eventLog.prepend(newLog);
+        if (eventLog.children.length > 30) {
+          eventLog.removeChild(eventLog.lastChild);
+        }
+      }
 
       function updateTimeDisplay() {
         timeSpan.innerText = startTime;
@@ -264,7 +259,7 @@
             }
           }
         }, 1000);
-        // logEvent("遊戲開始");
+        logEvent("遊戲開始");
       }
 
       function pauseGame() {
@@ -272,7 +267,7 @@
         pauseBtn.classList.add("hide-btn");
         resumeBtn.classList.remove("hide-btn");
         moleImage.src = "./images/1.jpg"; // 暫停時顯示 1.jpg
-        // logEvent("遊戲暫停");
+        logEvent("遊戲暫停");
       }
 
       function resumeGame() {
@@ -280,7 +275,7 @@
         resumeBtn.classList.add("hide-btn");
         pauseBtn.classList.remove("hide-btn");
         moleImage.src = "./images/1.jpg"; // 恢復遊戲時顯示 1.jpg
-        // logEvent("遊戲恢復");
+        logEvent("遊戲恢復");
       }
 
       function stopGame() {
@@ -297,14 +292,14 @@
         clearScoreBtn.classList.add("hide-btn");
         startBtn.classList.remove("hide-btn");
         moleImage.src = "./images/1.jpg"; // 重置時顯示 1.jpg
-        // logEvent("遊戲重置");
+        logEvent("遊戲重置");
       }
 
       function clearMaxScore() {
         localStorage.removeItem("maxScore");
         maxScore = 0;
         maxScoreSpan.innerText = maxScore;
-        // logEvent("最高分數清除");
+        logEvent("最高分數清除");
       }
       clearScoreBtn.addEventListener("click", clearMaxScore); // 清除最高分數
 
@@ -335,13 +330,11 @@
       stopBtn.addEventListener("click", stopGame);
       // hitBtn.addEventListener("mousedown", () => {
       hitBtn.addEventListener("pointerdown", () => {
-        // logEvent("pointerdown");
+        logEvent("pointerdown");
         console.log(1);
-        // logEvent("1");
 
         if (startTime < 1 || isPaused) return;
         console.log(3);
-        // logEvent("3");
 
         moleImage.src = "./images/2.jpg"; // 按下時顯示 2.jpg
         hitMole();
@@ -349,13 +342,11 @@
 
       // hitBtn.addEventListener("mouseup", () => {
       hitBtn.addEventListener("pointerup", () => {
-        // logEvent("pointerup");
+        logEvent("pointerup");
         console.log(2);
-        // logEvent("2");
 
         if (startTime < 1 || isPaused) return;
         console.log(4);
-        // logEvent("4");
 
         moleImage.src = "./images/1.jpg"; // 放開時顯示 1.jpg
       });
