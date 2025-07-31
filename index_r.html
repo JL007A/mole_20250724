@@ -16,7 +16,7 @@
         /* font-family: "JinXuan-Bold", sans-serif; */
         font-family: "GenWanMin TW", sans-serif;
         /* height: 100dvh；; 不然還要捲動體驗不好。 使用 dynamic viewport height */
-        overflow: hidden; /* 如果你希望不出現捲軸 */
+        /*overflow: hidden;  如果你希望不出現捲軸 */
       }
 
       .game-title {
@@ -217,7 +217,7 @@
       maxScoreSpan.innerText = maxScore;
 
       // 音效
-      const hitSound = new Audio("./sounds/ouch.mp3");
+      const hitSound = new Audio("./sounds/c1.mp3");
       // logEvent_03
       function logEvent(eventType) {
         const now = new Date();
