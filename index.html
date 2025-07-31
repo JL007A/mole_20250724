@@ -186,192 +186,194 @@
     <!-- jQuery -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script>
-      const startBtn = document.getElementById("startBtn");
-      const hitBtn = document.getElementById("hitBtn");
-      const pauseBtn = document.getElementById("pauseBtn");
-      const resumeBtn = document.getElementById("resumeBtn");
-      const stopBtn = document.getElementById("stopBtn");
-      const moleImage = document.getElementById("moleImage");
+      $(document).ready(function () {
+        const startBtn = document.getElementById("startBtn");
+        const hitBtn = document.getElementById("hitBtn");
+        const pauseBtn = document.getElementById("pauseBtn");
+        const resumeBtn = document.getElementById("resumeBtn");
+        const stopBtn = document.getElementById("stopBtn");
+        const moleImage = document.getElementById("moleImage");
 
-      const timeSpan = document.getElementById("time");
-      const scoreSpan = document.getElementById("score");
-      const maxScoreSpan = document.getElementById("maxScore");
-      const clearScoreBtn = document.getElementById("clearScoreBtn");
-      // logeventlog_02
-      // const eventLog = document.getElementById("eventLog");
+        const timeSpan = document.getElementById("time");
+        const scoreSpan = document.getElementById("score");
+        const maxScoreSpan = document.getElementById("maxScore");
+        const clearScoreBtn = document.getElementById("clearScoreBtn");
+        // logeventlog_02
+        // const eventLog = document.getElementById("eventLog");
 
-      let score = 0;
-      let maxScore = Number(localStorage.getItem("maxScore")) || 0;
-      let startTime = 10;
-      let bonusTime = 5;
-      let myInterval = null;
-      let isPaused = false;
+        let score = 0;
+        let maxScore = Number(localStorage.getItem("maxScore")) || 0;
+        let startTime = 10;
+        let bonusTime = 5;
+        let myInterval = null;
+        let isPaused = false;
 
-      maxScoreSpan.innerText = maxScore;
-
-      // 音效
-      const hitSound = new Audio("./sounds/c1.mp3");
-      // logEvent_03
-      // function logEvent(eventType) {
-      //   const now = new Date();
-      //   const timeString = now.toLocaleTimeString();
-      //   const newLog = document.createElement("p");
-      //   newLog.textContent = `[${timeString}] 事件: ${eventType}`;
-      //   eventLog.prepend(newLog);
-      //   if (eventLog.children.length > 30) {
-      //     eventLog.removeChild(eventLog.lastChild);
-      //   }
-      // }
-
-      function updateTimeDisplay() {
-        timeSpan.innerText = startTime;
-        if (startTime < bonusTime) {
-          timeSpan.className = "text-danger display-3";
-        } else {
-          timeSpan.className = "text-info display-3";
-        }
-      }
-
-      function startGame() {
-        score = 0;
-        startTime = 10;
-        updateTimeDisplay();
-        scoreSpan.innerText = score;
-        moleImage.src = "./images/1.jpg"; // 確保遊戲開始時顯示 1.jpg
-
-        hitBtn.classList.remove("hide-btn");
-        pauseBtn.classList.remove("hide-btn");
-        stopBtn.classList.remove("hide-btn");
-        clearScoreBtn.classList.remove("hide-btn");
-        startBtn.classList.add("hide-btn");
-
-        myInterval = setInterval(() => {
-          if (!isPaused) {
-            startTime--;
-            updateTimeDisplay();
-            if (startTime < 1) {
-              clearInterval(myInterval);
-              hitBtn.classList.add("hide-btn");
-              pauseBtn.classList.add("hide-btn");
-              // stopBtn.classList.add("stopBtn");
-              startBtn.classList.remove("hide-btn");
-              moleImage.src = "./images/1.jpg"; // 遊戲結束時顯示 1.jpg
-            }
-          }
-        }, 1000);
-        // logEvent("遊戲開始");
-      }
-
-      function pauseGame() {
-        isPaused = true;
-        pauseBtn.classList.add("hide-btn");
-        resumeBtn.classList.remove("hide-btn");
-        moleImage.src = "./images/1.jpg"; // 暫停時顯示 1.jpg
-        // logEvent("遊戲暫停");
-      }
-
-      function resumeGame() {
-        isPaused = false;
-        resumeBtn.classList.add("hide-btn");
-        pauseBtn.classList.remove("hide-btn");
-        moleImage.src = "./images/1.jpg"; // 恢復遊戲時顯示 1.jpg
-        // logEvent("遊戲恢復");
-      }
-
-      function stopGame() {
-        clearInterval(myInterval);
-        isPaused = false;
-        score = 0;
-        startTime = 10;
-        scoreSpan.innerText = score;
-        updateTimeDisplay();
-        hitBtn.classList.add("hide-btn");
-        pauseBtn.classList.add("hide-btn");
-        resumeBtn.classList.add("hide-btn");
-        stopBtn.classList.add("hide-btn");
-        clearScoreBtn.classList.add("hide-btn");
-        startBtn.classList.remove("hide-btn");
-        moleImage.src = "./images/1.jpg"; // 重置時顯示 1.jpg
-        // logEvent("遊戲重置");
-      }
-
-      function clearMaxScore() {
-        localStorage.removeItem("maxScore");
-        maxScore = 0;
         maxScoreSpan.innerText = maxScore;
-        // logEvent("最高分數清除");
-      }
-      clearScoreBtn.addEventListener("click", clearMaxScore); // 清除最高分數
 
-      function hitMole() {
-        if (startTime < 1 || isPaused) return;
-        hitSound.currentTime = 0;
-        hitSound.play();
+        // 音效
+        const hitSound = new Audio("./sounds/c1.mp3");
+        // logEvent_03
+        // function logEvent(eventType) {
+        //   const now = new Date();
+        //   const timeString = now.toLocaleTimeString();
+        //   const newLog = document.createElement("p");
+        //   newLog.textContent = `[${timeString}] 事件: ${eventType}`;
+        //   eventLog.prepend(newLog);
+        //   if (eventLog.children.length > 30) {
+        //     eventLog.removeChild(eventLog.lastChild);
+        //   }
+        // }
 
-        if (startTime > bonusTime) {
-          score += 2;
-        } else {
-          score += 3;
+        function updateTimeDisplay() {
+          timeSpan.innerText = startTime;
+          if (startTime < bonusTime) {
+            timeSpan.className = "text-danger display-3";
+          } else {
+            timeSpan.className = "text-info display-3";
+          }
         }
 
-        scoreSpan.innerText = score;
+        function startGame() {
+          score = 0;
+          startTime = 10;
+          updateTimeDisplay();
+          scoreSpan.innerText = score;
+          moleImage.src = "./images/1.jpg"; // 確保遊戲開始時顯示 1.jpg
 
-        if (score > maxScore) {
-          maxScore = score;
-          localStorage.setItem("maxScore", maxScore);
+          hitBtn.classList.remove("hide-btn");
+          pauseBtn.classList.remove("hide-btn");
+          stopBtn.classList.remove("hide-btn");
+          clearScoreBtn.classList.remove("hide-btn");
+          startBtn.classList.add("hide-btn");
+
+          myInterval = setInterval(() => {
+            if (!isPaused) {
+              startTime--;
+              updateTimeDisplay();
+              if (startTime < 1) {
+                clearInterval(myInterval);
+                hitBtn.classList.add("hide-btn");
+                pauseBtn.classList.add("hide-btn");
+                // stopBtn.classList.add("stopBtn");
+                startBtn.classList.remove("hide-btn");
+                moleImage.src = "./images/1.jpg"; // 遊戲結束時顯示 1.jpg
+              }
+            }
+          }, 1000);
+          // logEvent("遊戲開始");
+        }
+
+        function pauseGame() {
+          isPaused = true;
+          pauseBtn.classList.add("hide-btn");
+          resumeBtn.classList.remove("hide-btn");
+          moleImage.src = "./images/1.jpg"; // 暫停時顯示 1.jpg
+          // logEvent("遊戲暫停");
+        }
+
+        function resumeGame() {
+          isPaused = false;
+          resumeBtn.classList.add("hide-btn");
+          pauseBtn.classList.remove("hide-btn");
+          moleImage.src = "./images/1.jpg"; // 恢復遊戲時顯示 1.jpg
+          // logEvent("遊戲恢復");
+        }
+
+        function stopGame() {
+          clearInterval(myInterval);
+          isPaused = false;
+          score = 0;
+          startTime = 10;
+          scoreSpan.innerText = score;
+          updateTimeDisplay();
+          hitBtn.classList.add("hide-btn");
+          pauseBtn.classList.add("hide-btn");
+          resumeBtn.classList.add("hide-btn");
+          stopBtn.classList.add("hide-btn");
+          clearScoreBtn.classList.add("hide-btn");
+          startBtn.classList.remove("hide-btn");
+          moleImage.src = "./images/1.jpg"; // 重置時顯示 1.jpg
+          // logEvent("遊戲重置");
+        }
+
+        function clearMaxScore() {
+          localStorage.removeItem("maxScore");
+          maxScore = 0;
           maxScoreSpan.innerText = maxScore;
+          // logEvent("最高分數清除");
         }
-      }
+        clearScoreBtn.addEventListener("click", clearMaxScore); // 清除最高分數
 
-      // 綁定事件(按鈕)
-      startBtn.addEventListener("click", startGame);
-      pauseBtn.addEventListener("click", pauseGame);
-      resumeBtn.addEventListener("click", resumeGame);
-      stopBtn.addEventListener("click", stopGame);
-      // hitBtn.addEventListener("mousedown", () => {
-      hitBtn.addEventListener("pointerdown", () => {
-        // logEvent("pointerdown");
-        console.log(1);
+        function hitMole() {
+          if (startTime < 1 || isPaused) return;
+          hitSound.currentTime = 0;
+          hitSound.play();
 
-        if (startTime < 1 || isPaused) return;
-        console.log(3);
+          if (startTime > bonusTime) {
+            score += 2;
+          } else {
+            score += 3;
+          }
 
-        moleImage.src = "./images/2.jpg"; // 按下時顯示 2.jpg
-        hitMole();
+          scoreSpan.innerText = score;
+
+          if (score > maxScore) {
+            maxScore = score;
+            localStorage.setItem("maxScore", maxScore);
+            maxScoreSpan.innerText = maxScore;
+          }
+        }
+
+        // 綁定事件(按鈕)
+        startBtn.addEventListener("click", startGame);
+        pauseBtn.addEventListener("click", pauseGame);
+        resumeBtn.addEventListener("click", resumeGame);
+        stopBtn.addEventListener("click", stopGame);
+        // hitBtn.addEventListener("mousedown", () => {
+        hitBtn.addEventListener("pointerdown", () => {
+          // logEvent("pointerdown");
+          console.log(1);
+
+          if (startTime < 1 || isPaused) return;
+          console.log(3);
+
+          moleImage.src = "./images/2.jpg"; // 按下時顯示 2.jpg
+          hitMole();
+        });
+
+        // hitBtn.addEventListener("mouseup", () => {
+        hitBtn.addEventListener("pointerup", () => {
+          // logEvent("pointerup");
+          console.log(2);
+
+          if (startTime < 1 || isPaused) return;
+          console.log(4);
+
+          moleImage.src = "./images/1.jpg"; // 放開時顯示 1.jpg
+        });
+
+        // touch_04
+        // hitBtn.addEventListener(
+        //   "touchstart",
+        //   () => {
+        //     logEvent("touchstart");
+        //     console.log(a);
+        //     if (startTime < 1 || isPaused) return;
+        //     console.log(c);
+        //     moleImage.src = "./images/2.jpg";
+        //     hitMole();
+        //   },
+        //   { passive: true }
+        // );
+
+        // hitBtn.addEventListener("touchend", () => {
+        //   logEvent("touchend");
+        //   console.log(b);
+        //   if (startTime < 1 || isPaused) return;
+        //   console.log(d);
+        //   moleImage.src = "./images/1.jpg";
+        // });
       });
-
-      // hitBtn.addEventListener("mouseup", () => {
-      hitBtn.addEventListener("pointerup", () => {
-        // logEvent("pointerup");
-        console.log(2);
-
-        if (startTime < 1 || isPaused) return;
-        console.log(4);
-
-        moleImage.src = "./images/1.jpg"; // 放開時顯示 1.jpg
-      });
-
-      // touch_04
-      // hitBtn.addEventListener(
-      //   "touchstart",
-      //   () => {
-      //     logEvent("touchstart");
-      //     console.log(a);
-      //     if (startTime < 1 || isPaused) return;
-      //     console.log(c);
-      //     moleImage.src = "./images/2.jpg";
-      //     hitMole();
-      //   },
-      //   { passive: true }
-      // );
-
-      // hitBtn.addEventListener("touchend", () => {
-      //   logEvent("touchend");
-      //   console.log(b);
-      //   if (startTime < 1 || isPaused) return;
-      //   console.log(d);
-      //   moleImage.src = "./images/1.jpg";
-      // });
     </script>
   </body>
 </html>
