@@ -20,6 +20,7 @@
         /* font-family: "YuanSuei-Regular", sans-serif; */
         /* font-family: "JinXuan-Bold", sans-serif; */
         font-family: "GenWanMin TW", sans-serif;
+        min-height: 100dvh; /*讓最小高度是 100px，但可隨文字自動撐高*/
       }
 
       .game-title {
@@ -33,7 +34,6 @@
         text-shadow: 0 0 8px #ffd54f;
         /* text-shadow: 2px 2px #500808, 4px 4px #260404; */
         /* box-shadow: 2px 2px #500808, 4px 4px #260404; */
-        /* min-height: 100px; //讓最小高度是 100px，但可隨文字自動撐高 */
         /* border-radius: 6px 6px 6px 6px; */
       }
       .score {
@@ -84,6 +84,7 @@
         font-weight: bold;
         /* box-shadow: 3px 3px rgba(0, 0, 0, 0.4); */
         box-shadow: 0 4px 15px rgb(0 0 0 / 0.3);
+        touch-action: manipulation; /* 可以禁止預設行為  解決問題:蘋果連點兩下會放大 */
       }
       button:hover {
         font-size: 1.2rem;
