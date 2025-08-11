@@ -10,6 +10,7 @@
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="./images/favicon.ico" />
 
+    <!-- <title>泰山打地鼠遊戲</title> -->
     <title>JCODE打地鼠遊戲</title>
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.7/css/bootstrap.min.css" />
@@ -98,15 +99,13 @@
         font-size: 1.4rem;
         font-weight: bold;
         /* box-shadow: 3px 3px rgba(0, 0, 0, 0.4); */
-        box-shadow: 5px 5px rgba(0, 0, 0, 0.4);
-        /* box-shadow: 0 4px 15px rgb(0 0 0 / 0.3); */
-        border: 2px solid white;
+        box-shadow: 0 4px 15px rgb(0 0 0 / 0.3);
         touch-action: manipulation; /* 可以禁止預設行為  解決問題:蘋果連點兩下會放大 */
         opacity: 0.8;
       }
       button:hover {
         font-size: 1.1rem;
-        box-shadow: 6px 6px rgba(0, 0, 0, 0.4);
+        box-shadow: 3px 3px rgba(0, 0, 0, 0.4);
       }
       .hide-btn {
         display: none;
@@ -123,6 +122,7 @@
       .my-white-border {
         border: 3px solid #eee !important;
       }
+
       /* RWD 調整 + 手機裝置隱藏指定圖片*/
       /* 這樣當瀏覽器寬度在 767.98px 以下（手機裝置常見寬度）時，兩張圖片會自動隱藏。在桌機版則照常顯示。 */
       @media (max-width: 767.98px) {
@@ -214,172 +214,194 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.7/js/bootstrap.bundle.min.js"></script>
     <!-- jQuery -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-
     <script>
       $(document).ready(function () {
-        // === 取得 DOM 元素（jQuery 選擇器） ===
-        const $startBtn = $("#startBtn"); // 開始遊戲按鈕
-        const $hitBtn = $("#hitBtn"); // 打地鼠按鈕
-        const $pauseBtn = $("#pauseBtn"); // 暫停遊戲按鈕
-        const $resumeBtn = $("#resumeBtn"); // 取消暫停按鈕
-        const $stopBtn = $("#stopBtn"); // 重置遊戲按鈕
-        const $moleImage = $("#moleImage"); // 中間地鼠圖片
+        const startBtn = document.getElementById("startBtn");
+        const hitBtn = document.getElementById("hitBtn");
+        const pauseBtn = document.getElementById("pauseBtn");
+        const resumeBtn = document.getElementById("resumeBtn");
+        const stopBtn = document.getElementById("stopBtn");
+        const moleImage = document.getElementById("moleImage");
 
-        const $timeSpan = $("#time"); // 倒數計時顯示
-        const $scoreSpan = $("#score"); // 當前分數顯示
-        const $maxScoreSpan = $("#maxScore"); // 最高分顯示
-        const $clearScoreBtn = $("#clearScoreBtn"); // 清除最高分數按鈕
+        const timeSpan = document.getElementById("time");
+        const scoreSpan = document.getElementById("score");
+        const maxScoreSpan = document.getElementById("maxScore");
+        const clearScoreBtn = document.getElementById("clearScoreBtn");
+        // logeventlog_02
+        // const eventLog = document.getElementById("eventLog");
 
-        // === 遊戲變數 ===
-        let score = 0; // 當前分數
-        let maxScore = Number(localStorage.getItem("maxScore")) || 0; // 最高分數（從 localStorage 讀取）
-        let startTime = 10; // 初始倒數秒數
-        let bonusTime = 5; // 加分時間門檻
-        let myInterval = null; // 計時器 ID
-        let isPaused = false; // 是否暫停遊戲
+        let score = 0;
+        let maxScore = Number(localStorage.getItem("maxScore")) || 0;
+        let startTime = 10;
+        let bonusTime = 5;
+        let myInterval = null;
+        let isPaused = false;
 
-        // 初始化最高分顯示
-        $maxScoreSpan.text(maxScore);
+        maxScoreSpan.innerText = maxScore;
 
-        // 音效物件
+        // 音效
         const hitSound = new Audio("./sounds/c1.mp3");
+        // logEvent_03
+        // function logEvent(eventType) {
+        //   const now = new Date();
+        //   const timeString = now.toLocaleTimeString();
+        //   const newLog = document.createElement("p");
+        //   newLog.textContent = `[${timeString}] 事件: ${eventType}`;
+        //   eventLog.prepend(newLog);
+        //   if (eventLog.children.length > 30) {
+        //     eventLog.removeChild(eventLog.lastChild);
+        //   }
+        // }
 
-        /**
-         * 更新倒數時間顯示
-         */
         function updateTimeDisplay() {
-          $timeSpan.text(startTime);
+          timeSpan.innerText = startTime;
           if (startTime < bonusTime) {
-            $timeSpan.attr("class", "text-danger display-3"); // 時間快結束 → 紅色
+            timeSpan.className = "text-danger display-3";
           } else {
-            $timeSpan.attr("class", "text-info display-3"); // 正常時間 → 藍色
+            timeSpan.className = "text-info display-3";
           }
         }
 
-        /**
-         * 開始遊戲
-         */
         function startGame() {
           score = 0;
           startTime = 10;
           updateTimeDisplay();
-          $scoreSpan.text(score);
-          $moleImage.attr("src", "./images/1.jpg"); // 顯示初始地鼠
+          scoreSpan.innerText = score;
+          moleImage.src = "./images/1.jpg"; // 確保遊戲開始時顯示 1.jpg
 
-          // 顯示遊戲中按鈕，隱藏開始按鈕
-          $hitBtn.removeClass("hide-btn");
-          $pauseBtn.removeClass("hide-btn");
-          $stopBtn.removeClass("hide-btn");
-          $clearScoreBtn.removeClass("hide-btn");
-          $startBtn.addClass("hide-btn");
+          hitBtn.classList.remove("hide-btn");
+          pauseBtn.classList.remove("hide-btn");
+          stopBtn.classList.remove("hide-btn");
+          clearScoreBtn.classList.remove("hide-btn");
+          startBtn.classList.add("hide-btn");
 
-          // 啟動計時器
           myInterval = setInterval(() => {
             if (!isPaused) {
               startTime--;
               updateTimeDisplay();
               if (startTime < 1) {
                 clearInterval(myInterval);
-                $hitBtn.addClass("hide-btn");
-                $pauseBtn.addClass("hide-btn");
-                $startBtn.removeClass("hide-btn");
-                $moleImage.attr("src", "./images/1.jpg"); // 時間到顯示初始地鼠
+                hitBtn.classList.add("hide-btn");
+                pauseBtn.classList.add("hide-btn");
+                // stopBtn.classList.add("stopBtn");
+                startBtn.classList.remove("hide-btn");
+                moleImage.src = "./images/1.jpg"; // 遊戲結束時顯示 1.jpg
               }
             }
           }, 1000);
+          // logEvent("遊戲開始");
         }
 
-        /**
-         * 暫停遊戲
-         */
         function pauseGame() {
           isPaused = true;
-          $pauseBtn.addClass("hide-btn");
-          $resumeBtn.removeClass("hide-btn");
-          $moleImage.attr("src", "./images/1.jpg"); // 暫停顯示初始地鼠
+          pauseBtn.classList.add("hide-btn");
+          resumeBtn.classList.remove("hide-btn");
+          moleImage.src = "./images/1.jpg"; // 暫停時顯示 1.jpg
+          // logEvent("遊戲暫停");
         }
 
-        /**
-         * 恢復遊戲
-         */
         function resumeGame() {
           isPaused = false;
-          $resumeBtn.addClass("hide-btn");
-          $pauseBtn.removeClass("hide-btn");
-          $moleImage.attr("src", "./images/1.jpg");
+          resumeBtn.classList.add("hide-btn");
+          pauseBtn.classList.remove("hide-btn");
+          moleImage.src = "./images/1.jpg"; // 恢復遊戲時顯示 1.jpg
+          // logEvent("遊戲恢復");
         }
 
-        /**
-         * 重置遊戲
-         */
         function stopGame() {
           clearInterval(myInterval);
           isPaused = false;
           score = 0;
           startTime = 10;
-          $scoreSpan.text(score);
+          scoreSpan.innerText = score;
           updateTimeDisplay();
-
-          // 隱藏遊戲按鈕，顯示開始按鈕
-          $hitBtn.addClass("hide-btn");
-          $pauseBtn.addClass("hide-btn");
-          $resumeBtn.addClass("hide-btn");
-          $stopBtn.addClass("hide-btn");
-          $clearScoreBtn.addClass("hide-btn");
-          $startBtn.removeClass("hide-btn");
-
-          $moleImage.attr("src", "./images/1.jpg");
+          hitBtn.classList.add("hide-btn");
+          pauseBtn.classList.add("hide-btn");
+          resumeBtn.classList.add("hide-btn");
+          stopBtn.classList.add("hide-btn");
+          clearScoreBtn.classList.add("hide-btn");
+          startBtn.classList.remove("hide-btn");
+          moleImage.src = "./images/1.jpg"; // 重置時顯示 1.jpg
+          // logEvent("遊戲重置");
         }
 
-        /**
-         * 清除最高分數
-         */
         function clearMaxScore() {
           localStorage.removeItem("maxScore");
           maxScore = 0;
-          $maxScoreSpan.text(maxScore);
+          maxScoreSpan.innerText = maxScore;
+          // logEvent("最高分數清除");
         }
+        clearScoreBtn.addEventListener("click", clearMaxScore); // 清除最高分數
 
-        /**
-         * 打地鼠動作
-         */
         function hitMole() {
           if (startTime < 1 || isPaused) return;
-
           hitSound.currentTime = 0;
           hitSound.play();
 
-          // 計分邏輯
-          score += startTime > bonusTime ? 2 : 3;
-          $scoreSpan.text(score);
+          if (startTime > bonusTime) {
+            score += 2;
+          } else {
+            score += 3;
+          }
 
-          // 更新最高分
+          scoreSpan.innerText = score;
+
           if (score > maxScore) {
             maxScore = score;
             localStorage.setItem("maxScore", maxScore);
-            $maxScoreSpan.text(maxScore);
+            maxScoreSpan.innerText = maxScore;
           }
         }
 
-        // === 綁定事件 ===
-        $startBtn.on("click", startGame); // 開始
-        $pauseBtn.on("click", pauseGame); // 暫停
-        $resumeBtn.on("click", resumeGame); // 恢復
-        $stopBtn.on("click", stopGame); // 重置
-        $clearScoreBtn.on("click", clearMaxScore); // 清除最高分
+        // 綁定事件(按鈕)
+        startBtn.addEventListener("click", startGame);
+        pauseBtn.addEventListener("click", pauseGame);
+        resumeBtn.addEventListener("click", resumeGame);
+        stopBtn.addEventListener("click", stopGame);
+        // hitBtn.addEventListener("mousedown", () => {
+        hitBtn.addEventListener("pointerdown", () => {
+          // logEvent("pointerdown");
+          console.log(1);
 
-        // 滑鼠/觸控按下 → 換成地鼠被打的圖片 & 計分
-        $hitBtn.on("pointerdown", function () {
           if (startTime < 1 || isPaused) return;
-          $moleImage.attr("src", "./images/2.jpg");
+          console.log(3);
+
+          moleImage.src = "./images/2.jpg"; // 按下時顯示 2.jpg
           hitMole();
         });
 
-        // 滑鼠/觸控放開 → 換回正常地鼠圖片
-        $hitBtn.on("pointerup", function () {
+        // hitBtn.addEventListener("mouseup", () => {
+        hitBtn.addEventListener("pointerup", () => {
+          // logEvent("pointerup");
+          console.log(2);
+
           if (startTime < 1 || isPaused) return;
-          $moleImage.attr("src", "./images/1.jpg");
+          console.log(4);
+
+          moleImage.src = "./images/1.jpg"; // 放開時顯示 1.jpg
         });
+
+        // touch_04
+        // hitBtn.addEventListener(
+        //   "touchstart",
+        //   () => {
+        //     logEvent("touchstart");
+        //     console.log(a);
+        //     if (startTime < 1 || isPaused) return;
+        //     console.log(c);
+        //     moleImage.src = "./images/2.jpg";
+        //     hitMole();
+        //   },
+        //   { passive: true }
+        // );
+
+        // hitBtn.addEventListener("touchend", () => {
+        //   logEvent("touchend");
+        //   console.log(b);
+        //   if (startTime < 1 || isPaused) return;
+        //   console.log(d);
+        //   moleImage.src = "./images/1.jpg";
+        // });
       });
     </script>
   </body>
